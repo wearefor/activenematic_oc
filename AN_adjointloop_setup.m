@@ -1,7 +1,7 @@
 % XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-% Adjoint Looping Script for Active Nematic Control
-% INITIALIZIATION
-% (C) 2019-Present, Michael M. Norton
+% Active Nematic Optimal Control
+% Setup Script
+% (C) 2020 Michael M. Norton
 % Brandeis University, Physics
 % Pennsylvania State University, Center for Neural Engineering
 % XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -9,12 +9,17 @@ close all;
 clear all;
 clc;
 
-compstr='XXXXXXXX';
-filenamestr=datestr(now,'yyyymmdd_HHMM');
-new=input(['new session? new (1), old (0): ']);
+% Before running script:
+% 1. Start a comsol server in terminal. In Linux this looks like: $ comsol mphserver
+% 2. Connect matlab session to server: >> mphstart
+%      If this doesn't work, make sure that comsol is part of the Matlab path (see addpath below)
+
+compstr='computername';                             % make up a name for the computer this will run on... helpful if switching between multiple workstations
+filenamestr=datestr(now,'yyyymmdd_HHMM');           % generate a file name from date and time
 
 %% Configure Directories
-if strcmp(params.compstr,'XXXXXXXX')==1
+% If you don't want to permanently add Comsol to the Matlab path (or don't have permissions to do so), see below addpath()
+if strcmp(params.compstr,'computername')==1
     disp(['Configured for ' params.compstr])
     pathstr_main='/home/user/Documents/AN_control/';    % home directory of scripts
     cd(pathstr_main)
@@ -24,12 +29,7 @@ if strcmp(params.compstr,'XXXXXXXX')==1
     pathstr=[pathstr_main 'outputs/' filenamestr '/'];
 else
 end
-%% Start Comsol and Initiate Model
-if new==1
-    mphstart
-else
-end
-
+%%
 import com.comsol.model.*
 import com.comsol.model.util.*
 %ModelUtil.showProgress(true);
@@ -40,31 +40,32 @@ model.label(['LimitCycles_' filenamestr '.mph']);
 model.comments(['Confined Active Nematic']);
 %% Define Parameters
 
-model.param.set('lam1', '1');   %flow alignment
-model.param.set('rho0', '1.6'); %nematic density
-model.param.set('S0', 'sqrt(2*(rho0-1)/(rho0+1))');
-model.param.set('nx0', 'sqrt(1/2)');
-model.param.set('Smax', 'sqrt(2)');
-model.param.set('DomRad', '6.5', 'domain radius');
-model.param.set('Ea', '3', 'anchoring energy');
-model.param.set('pf', '0');
-model.param.set('C', 'rho0');
-model.param.set('cubic_A', '0.0445'); %initial condition for Q parameter
-model.param.set('cubic_B', '0.765');  %initial condition for Q parameter
-model.param.set('beta1', 'C-1'); %isotropic-nematic transition parameters
-model.param.set('beta2', '(C+1)/C^2'); %isotropic-nematic transition parameters
-model.param.set('rey', '0');
-model.param.set('gradstep', '0');
-model.param.set('A_Q_weight', '0');
-model.param.set('B_U_weight', '0');
-model.param.set('C_Q_weight', '0');
-model.param.set('D_U_weight', '0');
-model.param.set('E_thetaforce_weight', '0');
-model.param.set('epsreg', '1e-8');
-model.param.set('Gamma_alpha', '0.1');
-model.param.set('Gamma_g', '0.1');
-model.param.set('alpha0', '5');
-model.param.set('G0', '-0.5');
+model.param.set('lam1', '1');                       %flow alignment
+model.param.set('rho0', '1.6');                     %nematic density
+model.param.set('S0', 'sqrt(2*(rho0-1)/(rho0+1))'); %maximum degree of order for a given density
+model.param.set('Smax', 'sqrt(2)');                 %rho0->Inf
+model.param.set('DomRad', '6.5', 'domain radius');  %disk radius
+model.param.set('Ea', '3', 'anchoring energy');     %overwritten by Dirichlet anchoring
+model.param.set('pf', '0');                         %unused - weakens continuity
+model.param.set('C', 'rho0');                       %assume constant density (remove this when considering variable density)
+model.param.set('cubic_A', '0.0445');               %initial condition for Q parameter
+model.param.set('cubic_B', '0.765');                %initial condition for Q parameter
+model.param.set('beta1', 'C-1');                    %isotropic-nematic transition parameters
+model.param.set('beta2', '(C+1)/C^2');              %isotropic-nematic transition parameters
+model.param.set('rey', '0');                        %reynolds number - unused
+
+%control parameters (all get overwritten later)
+model.param.set('gradstep', '0');                   %gradient step size for gradient descent on control - gets defined later
+model.param.set('A_Q_weight', '0');                 %weight on terminal cost for Q
+model.param.set('B_U_weight', '0');                 %weight on terminal cost for u
+model.param.set('C_Q_weight', '0');                 %weight on stage cost for Q
+model.param.set('D_U_weight', '0');                 %weight on stage cost for u
+model.param.set('E_thetaforce_weight', '0');        %weight on terminal cost for chirtality of Q
+model.param.set('epsreg', '1e-8');                  %regularization of singularity for chirality penalty
+model.param.set('Gamma_alpha', '0.1');              %weight gradients in alpha
+model.param.set('Gamma_g', '0.1');                  %weight on gradients in g
+model.param.set('alpha0', '5');                     %base level activity strength
+model.param.set('G0', '0');                         %initial guess for g - gets overwritten in AN_adjointloop.m
 
 %% Define Functions, Geometry, etc..
 

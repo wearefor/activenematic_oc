@@ -6,7 +6,7 @@ function [gamma,armijo_steps,objFunc] = func_armijo(objFuncValue,ii,namestr,grad
 % ii           - iteration of adjoint looping
 % namestr      - string defining the name of studies, solvers, and datasets for the current index ii
 % gradmag      - magnitude of gradient of cost function
-%               *gradient is contained in the model (Ggrad or Agrad)
+%               *the gradient itself is contained in the model (Ggrad or Agrad)
 % params       - solver parameters
 
 gammaMax    = params.armijo_gammaMax;       % this is the maximum step length

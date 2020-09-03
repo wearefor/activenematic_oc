@@ -1,6 +1,7 @@
 % XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-% Adjoint Looping Script for Active Nematic Control
-% (C) 2019-Present, Michael M. Norton
+% Active Nematic Optimal Control
+% Adjoint Loop Script
+% (C) 2020 Michael M. Norton
 % Brandeis University, Physics
 % Pennsylvania State University, Center for Neural Engineering
 % XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
