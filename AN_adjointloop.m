@@ -82,7 +82,7 @@ switch lower(params.controltype)
         params.G0                   = 0;
         params.ucut                 = 99; %harshcutoff
 
-        params.control_max_weight   = 4000;
+        params.control_max_weight   = 0; %~4000, turn on a soft constraint on maximum alpha
         params.control_max_soft     = 16;
         params.control_max_power    = 4;
 
