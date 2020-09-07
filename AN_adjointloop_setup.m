@@ -53,6 +53,7 @@ model.param.set('cubic_B', '0.765');                %initial condition for Q par
 model.param.set('beta1', 'C-1');                    %isotropic-nematic transition parameters
 model.param.set('beta2', '(C+1)/C^2');              %isotropic-nematic transition parameters
 model.param.set('rey', '0');                        %reynolds number - unused
+model.param.set('tLCmax', '15');                    %time duration of limit cycle solution, period ~5
 
 %control parameters (all get overwritten later)
 model.param.set('gradstep', '0');                   %gradient step size for gradient descent on control - gets defined later
@@ -62,8 +63,6 @@ model.param.set('C_Q_weight', '0');                 %weight on stage cost for Q
 model.param.set('D_U_weight', '0');                 %weight on stage cost for u
 model.param.set('E_thetaforce_weight', '0');        %weight on terminal cost for chirtality of Q
 model.param.set('epsreg', '1e-8');                  %regularization of singularity for chirality penalty
-model.param.set('Gamma_alpha', '0.1');              %weight gradients in alpha
-model.param.set('Gamma_g', '0.1');                  %weight on gradients in g
 model.param.set('alpha0', '5');                     %base level activity strength
 model.param.set('G0', '0');                         %initial guess for g - gets overwritten in AN_adjointloop.m
 
@@ -481,7 +480,7 @@ model.study('std_isolate_CW').feature('time').set('solnum', 'interp');
 model.study('std_isolate_CW').feature('time').set('useinitsol', 'on');
 model.study('std_isolate_CW').feature('time').set('rtol', '1e-8');
 model.study('std_isolate_CW').feature('time').set('useadvanceddisable', true);
-model.study('std_isolate_CW').feature('time').set('tlist', 'range(0,0.05,15)');
+model.study('std_isolate_CW').feature('time').set('tlist', 'range(0,0.05,tLCmax)');
 model.study('std_isolate_CW').feature('time').set('t', '25');
 model.study('std_isolate_CW').feature('time').set('disabledphysics', {'w2/wfeq4' 'w/wfeq16'});
 %model.study('std_isolate_CW').feature('time').set('disabledvariables', {'var_Anew_0' 'var_Anew_a' 'var_Anew_b'});
@@ -498,7 +497,7 @@ model.study('std_isolate_CCW').feature('time').set('solnum', 'interp');
 model.study('std_isolate_CCW').feature('time').set('useinitsol', 'on');
 model.study('std_isolate_CCW').feature('time').set('rtol', '1e-8');
 model.study('std_isolate_CCW').feature('time').set('useadvanceddisable', true);
-model.study('std_isolate_CCW').feature('time').set('tlist', 'range(0,0.05,15)');
+model.study('std_isolate_CCW').feature('time').set('tlist', 'range(0,0.05,tLCmax)');
 model.study('std_isolate_CCW').feature('time').set('t', '25');
 model.study('std_isolate_CCW').feature('time').set('disabledphysics', {'w2/wfeq4' 'w/wfeq16'});
 %model.study('std_isolate_CCW').feature('time').set('disabledvariables', {'var_Anew_0' 'var_Anew_a' 'var_Anew_b'});

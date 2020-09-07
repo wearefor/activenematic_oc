@@ -10,14 +10,15 @@ close all;
 clear all;
 clc;
 
-%%
-pathsetstr='full path here'
-filestr='mph file name'
-model=mphload([pathsetstr '/' filestr]);
+filestr='mph file name + path'
+model=mphload([filestr]);
 
 dsetnamestr='dsetname for Q u p';
 dsetnamestr_control='dsetname for control';
-%mphnavigator(model); %if data set name string is unknown: 1) use mphnavigator or 2) open mph file in Comsol to help navigate the study/solution/data trees
+%mphnavigator(model);
+%if data set name string is unknown:
+% 1) use mphnavigator or
+% 2) open mph file in Comsol to help navigate the study/solution/data trees
 %*note that data sets containing {Q,u,p} dynamics and control solutions will be different!*
 
 params.N=100; %spatial resolution for interpolating solution

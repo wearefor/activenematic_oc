@@ -31,7 +31,7 @@ paramsweep=combvec(theta_list,...
     Qweight_C_list,...
     Nloop_list);
 
-[~,N_loop]=size(paramsweep);
+[~,N_runs]=size(paramsweep);
 
 % XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 % choose control goal (ccw or cw) and control field (torque or stress) and other settings
@@ -115,7 +115,7 @@ switch lower(params.controltype)
 end
 
 % choose which a parameter set to use
-i_set=input(['Select a data set index between 1 and ' num2str(N_loop) ' : ']);
+i_set=input(['Select a data set index between 1 and ' num2str(N_runs) ' : ']);
 
 for i_loop=i_set;
     filenamestr=[datestr(now,'yyyymmdd_HHMM') '_' num2str(i_loop)];
@@ -173,6 +173,7 @@ for i_loop=i_set;
     params.E_thetaforce_weight=paramsweep(4,i_loop);%*params.A_Q_weight;
     params.Nloop=paramsweep(6,i_loop);
 
+
     disp(['///\\\///\\\///\\\///\\\///\\\///\\\///\\\///\\\///\\\///\\\///\\\']);
     disp(['\\\///\\\///\\\///\\\///\\\///\\\///\\\///\\\///\\\///\\\///\\\///']);
     disp(['Initial State: ' params.startstr ', Initial Phase: ' num2str(params.thetastart)]);
@@ -189,9 +190,12 @@ for i_loop=i_set;
     model.param.set('B_U_weight',  num2str(params.B_U_weight));
     model.param.set('C_Q_weight',  num2str(params.C_Q_weight));
     model.param.set('D_U_weight',  num2str(params.D_U_weight));
+    model.param.set('Gamma_alpha', '0.1');              %weight on gradients in alpha
+    model.param.set('Gamma_g', '0.1');                  %weight on gradients in g
     model.param.set('control_max_weight',  num2str(params.control_max_weight));
     model.param.set('control_max_soft',  num2str(params.control_max_soft));
     model.param.set('control_max_power',  num2str(params.control_max_power));
+
 
     model.param.set('E_thetaforce_weight',  num2str(params.E_thetaforce_weight));
     %model.param.set('epsreg',  num2str(params.epsreg));
