@@ -11,7 +11,7 @@ with other versions is untested
 3. matlab-ascii-plot, free download https://github.com/kyak/matlab-ascii-plot/releases/tag/0.1.1
 
 Installation:
-1. Download or pull
+1. Download and unzip
 2. Configure AN_adjointloop_setup.m and AN_adjointloop.m
 3. Further details in manual.pdf
 
