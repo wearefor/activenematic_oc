@@ -16,6 +16,5 @@ Installation:
 3. Further details in manual.pdf
 
 Acknowledgements:
-This research was conducted at Bradeis University, Waltham, Massachusetts USA and University of Nebraska, Lincoln, Nebraska, USA
-This work was supported by the NSF MRSEC-1420382, NSF-DMR-2011486, NSFDMR1810077, and DMR-1855914 and the University of Nebraska startup fund.
+This research was conducted at Bradeis University, Waltham, Massachusetts USA, University of Nebraska, Lincoln, Nebraska, USA and Pennsylvania State University, University Park, Pennsylvania, USA. This work was supported by the NSF MRSEC-1420382, NSF-DMR-2011486, NSFDMR1810077, and DMR-1855914 and the University of Nebraska startup fund.
 Computational resources were provided by the NSF through XSEDE computing resources (MCB090163) and the Brandeis HPCC, which is partially supported by NSFDMR-2011486. 
